@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role Role?
+  contactNo String
+  address String
+  profileImg String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rviewAndRatings ReviewAndRating?
+
+  @@map("user")
+}
+
+
+model Category{
+  id String @id @default(uuid())
+  title String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books Book[]
+  
+  @@map("category")
+}
+
+model Book {
+  id String @id @default(uuid())
+  title String
+  author String
+  price Float
+  genre String
+  publicationDate String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+
+  reviewAndRatings ReviewAndRating?
+
+  @@map("book")
+}
+
+model ReviewAndRating {
+  id String @id @default(uuid())
+  review  String
+  rating  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId  String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  bookId  String @unique
+  book Book @relation(fields: [bookId], references: [id])
+
+  @@map("review-and-rating")
+}
+
+model Order {
+  id String @id @default(uuid())
+  userId String
+  status Status @default(pending)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderedBooks OrderedBook[] 
+
+  @@map("order")
+}
+
+model OrderedBook {
+  id String @id @default(uuid())
+  orderId String
+  bookId String
+  quantity Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("ordered-book")
+}
+
+
+
+enum Role {
+  admin
+  customer
+}
+
+enum Status {
+  pending
+  shipped
+  delivered
+}
