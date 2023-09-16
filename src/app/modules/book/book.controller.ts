@@ -37,8 +37,62 @@ const getAllBook = catchAsync(async (req: Request, res: Response) => {
       });
 });
 
+const getBookByCategory = catchAsync(async (req: Request, res: Response) => {
+    const categoryId = req.params.categoryId;
+    const result = await bookServices.getBookByCategory(categoryId);
+
+    sendResponse<Book[]>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'get selected category books successfully',
+        data: result,
+      });
+});
+
+const getSingleBook = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await bookServices.getSingleBook(id);
+
+    sendResponse<Book>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'get single book successfully',
+        data: result,
+      });
+});
+
+const updateBook = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const data = req.body;
+    console.log(data);
+    const result = await bookServices.updateBook(id, data);
+
+    sendResponse<Book>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'update book successfully',
+        data: result,
+      });
+});
+
+const deleteBook = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await bookServices.deleteBook(id);
+
+    sendResponse<Book>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'deleted book successfully',
+        data: result,
+      });
+});
+
 
 export const bookController = {
     createBook,
     getAllBook,
+    getBookByCategory,
+    getSingleBook,
+    updateBook,
+    deleteBook,
 };
