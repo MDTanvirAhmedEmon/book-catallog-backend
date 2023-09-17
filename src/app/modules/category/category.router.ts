@@ -5,7 +5,7 @@ import { ENUM_USER_ROLE } from '../../../enums/user';
 
 const router = express.Router();
 
-router.post('/',auth(ENUM_USER_ROLE.ADMIN), categoryController.createCategory);
+router.post('/create-category',auth(ENUM_USER_ROLE.ADMIN), categoryController.createCategory);
 router.get('/', categoryController.getAllCategory);
 router.get('/:id', categoryController.getSingleCategory);
 router.patch('/:id',auth(ENUM_USER_ROLE.ADMIN), categoryController.updateCategory);

@@ -5,7 +5,7 @@ import { ENUM_USER_ROLE } from '../../../enums/user';
 
 const router = express.Router();
 
-router.post('/',auth(ENUM_USER_ROLE.ADMIN), bookController.createBook);
+router.post('/create-book',auth(ENUM_USER_ROLE.ADMIN), bookController.createBook);
 router.get('/', bookController.getAllBook);
 router.get('/:categoryId/category', bookController.getBookByCategory);
 router.get('/:id', bookController.getSingleBook);
